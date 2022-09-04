@@ -50,6 +50,8 @@ public static class LogisticsService
             Console.WriteLine($"Product Id: {item.Product.Id}");
             Console.WriteLine($"Product Quantity: {item.Quantity}");
         }
+
+        Console.WriteLine();
     }
 
     // By Id
@@ -59,9 +61,10 @@ public static class LogisticsService
         var orders = context.Orders
                      .Include(x => x.Customer)
                      .Include(y => y.Product)
+                     .Where(a => a.Product.Id == id)
                      .OrderByDescending(z => z.Id)
                      .ToList();
-
+        Console.ForegroundColor = ConsoleColor.Blue;
         foreach (var item in orders)
         {
             Console.WriteLine($"Customer: {item.Customer.CustomerName}");
@@ -69,6 +72,8 @@ public static class LogisticsService
             Console.WriteLine($"Product Id: {item.Product.Id}");
             Console.WriteLine($"Product Quantity: {item.Quantity}");
         }
+        Console.ResetColor();
+        Console.WriteLine();
     }
 
 
@@ -79,11 +84,15 @@ public static class LogisticsService
             .Include(x => x.Customer)
             .Include(y => y.Product)
             .OrderByDescending(z => z.Id)
-            .FirstOrDefault();
+            .FirstOrDefault(a => a.Product.Id == id);
 
         order.Customer.CustomerName = "Customer recently updated";
         context.Orders.Update(order);
         context.SaveChanges();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Customer with product id {id} updated!\n");
+        Console.ResetColor();
     }
 
     public static void DeleteMethod(int id)
@@ -94,7 +103,7 @@ public static class LogisticsService
         context.Remove(customerToRemove);
         context.SaveChanges();
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Customer {id} deleted!");
+        Console.WriteLine($"Customer {id} deleted!\n");
         Console.ResetColor();
     }
 }
