@@ -42,10 +42,13 @@ public static class LogisticsService
                      .Include(y => y.Product)
                      .OrderByDescending(z => z.Id)
                      .ToList();
-        // Stopped here
+        
         foreach (var item in orders)
         {
-            Console.WriteLine(item);
+            Console.WriteLine($"Customer: {item.Customer.CustomerName}");
+            Console.WriteLine($"Customer Country: {item.Customer.Country}");
+            Console.WriteLine($"Product Id: {item.Product.Id}");
+            Console.WriteLine($"Product Quantity: {item.Quantity}");
         }
     }
 }
